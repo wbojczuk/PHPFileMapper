@@ -170,7 +170,7 @@ body{
     <?php
 
     // --- DIRECTORY TO SEACH IN ---
-    $directory = "./";
+    $directory = "./testing";
 
     // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
     $ignore_folders = array(
@@ -187,7 +187,7 @@ body{
     if(count($ignore_folders) > 0){
         $ignore_RegEx = "/";
     for($i = 0; $i < count($ignore_folders); ++$i){
-        if($i > (count($ignore_folders) - 1)){
+        if($i < (count($ignore_folders) - 1)){
             $ignore_RegEx .= "({$ignore_folders[$i]})|";
         }else{
             $ignore_RegEx .= "({$ignore_folders[$i]})";
@@ -195,7 +195,7 @@ body{
     }
     $ignore_RegEx .= "/i";
 }
-
+echo $ignore_RegEx;
 
     $items = scandir($directory);
     $current_lvl = 0;
