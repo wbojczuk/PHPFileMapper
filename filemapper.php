@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Mapper</title>
+    <!-- ---------- START OF CSS STYLING ---------- -->
     <style>
         *{
     margin:0;
@@ -15,9 +16,6 @@ body{
     min-width: 100vw;
     
 }
-
-
-
 
 .fm-container{
     display: inline-block;
@@ -159,13 +157,16 @@ body{
     background-color: #ccc;
     z-index: -10;
 }
-
     </style>
+<!-- ---------- END OF CSS STYLING ---------- -->
+
+
 </head>
 <body>
 <div class="fm-dir-root">ROOT</div>
-    <div class="fm-container">     
-        
+    <div class="fm-container">
+
+        <!-- ---------- START OF PHP SCRIPTING ---------- -->
     <?php
 
     // --- DIRECTORY TO SEACH IN ---
@@ -194,23 +195,16 @@ body{
     }
     $ignore_RegEx .= "/i";
 }
-    
 
-    // files level0[items[name=>value]]
 
     $items = scandir($directory);
-
-
-    // FOR RETURNS
-
     $current_lvl = 0;
     $incrementer = 0;
-    // Scan and set up top level
 
-    
     array_shift($items);
     array_shift($items);
     
+    // Ignore Folders
     if(count($ignore_folders) > 0){for($i = 0; $i < count($items); ++$i){
         if((is_dir($directory . "/" . $items[$i])) && (preg_match($ignore_RegEx, $items[$i], $matches))){
             array_splice($items, $i, 1);
@@ -218,6 +212,7 @@ body{
     }}
     
 
+    // Loop Through Items In Root Directory
     check_files($items, $directory);
 
     function check_files(&$items, $directory){
@@ -229,10 +224,10 @@ body{
                check_file($current_item, $directory);
     
         }
-        // If File, echo
         
     }
 
+    // Check Root Files
     function check_file($current_item, $directory){
         $current_item_path = $directory . "/" . $current_item;
        
@@ -284,6 +279,7 @@ body{
     }
 }
 
+// Move down and Test Sub-Directories
 function subdirs($root_path){
     $local_lvl = $GLOBALS['current_lvl'];
     $top_amt = $local_lvl;
@@ -302,9 +298,6 @@ function subdirs($root_path){
 
         // IF FILE
         if(is_file($current_item)){
-            
-            
-           
             if(preg_match("/(\.html)|(\.xml)/i", $temp_items[$i] , $matches)){
                 echo "<div class='fm-item fm-lower-level fm-webfile' >{$temp_items[$i]}</div>";
             }else if(preg_match("/(\.css)/i", $temp_items[$i] , $matches)){
