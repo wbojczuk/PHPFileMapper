@@ -341,7 +341,7 @@ function subdirs($root_path){
             
             
             if((key_exists(($i + 1), $temp_items))){
-                console_log($temp_items);
+           
                
             echo "<div class='fm-lower-wrapper fm-lower-after' style='top: {$top_amt}vh;'>";
             }else{
@@ -360,11 +360,6 @@ function subdirs($root_path){
     
 
 
-}
-
-function console_log($output){
-	$new_out = json_encode($output, JSON_HEX_TAG);
-    echo "<script>console.log($new_out);</script>";
 }
     ?>
     </div>
