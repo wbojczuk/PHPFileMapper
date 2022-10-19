@@ -39,7 +39,8 @@ body{
     padding: 4px;
     align-items: center;
     justify-content: center;
-    
+    color: black;
+    text-decoration: none;
     margin: 5px;
 }
 
@@ -113,6 +114,9 @@ body{
     height: 4vh;
     background-color: #aaa;
 }
+.fm-top-level-last:after{
+    display: none;
+}
 .fm-lower-level{
     margin-left: 1vw;
     top: 1.5vh;
@@ -148,11 +152,11 @@ body{
     content: '';
     display: inline-block;
     position: absolute;
-    top: -1.5px;
+    top: 0;
     left:-1vw;
-    width: 100%;
+    min-width: 100%;
     height: 2px;
-    margin-top: 1.5vh;
+    margin-top: 12px;
     padding: 0 2vw;
     background-color: #ccc;
     z-index: -10;
@@ -170,6 +174,7 @@ body{
     <?php
 
     // --- DIRECTORY TO SEACH IN ---
+    // IF DIRECTORY IS SET OUT OF THE WEB SERVER, LINKS WILL BE BROKEN
     $directory = "./";
 
     // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
@@ -221,40 +226,42 @@ body{
             for($o = 0; $o < count($items); ++$o){
 
                 $current_item = $items[$o];
-                
-               check_file($current_item, $directory);
+                $is_last = ($o==(count($items) - 1));
+               check_file($current_item, $directory, $is_last);
     
         }
         
     }
 
     // Check Root Files
-    function check_file($current_item, $directory){
+    function check_file($current_item, $directory, $is_last){
         $current_item_path = $directory . "/" . $current_item;
        
         if(is_file($current_item_path)){
             
-            if(preg_match("/(\.html)|(\.xml)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-webfile fm-top-level'>$current_item</div><br>";
-            }else if(preg_match("/(\.css)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-cssfile fm-top-level'>$current_item</div><br>";
-            }else if(preg_match("/(\.php)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-phpfile fm-top-level'>$current_item</div><br>";
+            if(preg_match("/(\.html)|(\.xml)/i", $current_item_path , $matches)){
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-webfile fm-top-level'>$current_item</a><br>";
+            }else if(preg_match("/(\.css)/i", $current_item_path , $matches)){
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-cssfile fm-top-level'>$current_item</a><br>";
+            }else if(preg_match("/(\.php)/i", $current_item_path , $matches)){
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-phpfile fm-top-level'>$current_item</a><br>";
             }else if(preg_match("/(\.png)|(\.jpg)|(\.jpeg)|(\.bmp)|(\.gif)|(\.tiff)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-rasterfile fm-top-level'>$current_item</div><br>";
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-rasterfile fm-top-level'>$current_item</a><br>";
             }else if(preg_match("/(\.ai)|(\.eps)|(\.svg)|(\.pdf)|(\.psd)|(\.gimp)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-vectorfile fm-top-level'>$current_item</div><br>";
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-vectorfile fm-top-level'>$current_item</a><br>";
             }else if(preg_match("/(\.doc)|(\.docx)|(\.odt)|(\.rtf)|(\.tex)|(\.txt)|(\.wpd)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-textfile fm-top-level'>$current_item</div><br>";
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-textfile fm-top-level'>$current_item</a><br>";
             }else if(preg_match("/(\.7z)|(\.zip)|(\.rar)|(\.pkg)|(\.deb)|(\.arj)|(\.exe)|(\.rpm)|(\.tar\.gz)|(\.z)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-compressfile fm-top-level'>$current_item</div><br>";
-            }else if(preg_match("/(\.js)/i", $current_item , $matches)){
-                $tempstr = "<div class='fm-item fm-jsfile fm-top-level'>$current_item</div><br>";
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-compressfile fm-top-level'>$current_item</a><br>";
+            }else if(preg_match("/(\.js)/i", $current_item_path , $matches)){
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-jsfile fm-top-level'>$current_item</a><br>";
             }else {
-                $tempstr = "<div class='fm-item fm-file fm-top-level'>$current_item</div><br>";
+                $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-file fm-top-level'>$current_item</a><br>";
             }
             
-           
+           if($is_last){
+            $tempstr = str_replace("class='","class='fm-top-level-last ", $tempstr);
+           }
             echo $tempstr;
             
 
@@ -262,7 +269,11 @@ body{
 
             $GLOBALS['current_lvl'] = 1;
             
-            $tempstr = "<div class='fm-item fm-dir fm-top-level'>$current_item</div>";
+            $tempstr = "<a target='_blank' href='$current_item_path' class='fm-item fm-dir fm-top-level'>$current_item</a>";
+             
+           if($is_last){
+            $tempstr = str_replace("class='","class='fm-top-level-last ", $tempstr);
+           }
             echo $tempstr;
             
                 
@@ -283,7 +294,7 @@ body{
 // Move down and Test Sub-Directories
 function subdirs($root_path){
     $local_lvl = $GLOBALS['current_lvl'];
-    $top_amt = $local_lvl;
+    $top_amt = $local_lvl + -0.1;
     $temp_items =  scandir($root_path);
     array_shift($temp_items);
     array_shift($temp_items);
@@ -302,34 +313,35 @@ function subdirs($root_path){
         // IF FILE
         if(is_file($current_item)){
             if(preg_match("/(\.html)|(\.xml)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-webfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-webfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.css)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-cssfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-cssfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.php)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-phpfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-phpfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.png)|(\.jpg)|(\.jpeg)|(\.bmp)|(\.gif)|(\.tiff)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-rasterfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-rasterfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.ai)|(\.eps)|(\.svg)|(\.pdf)|(\.psd)|(\.gimp)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-vectorfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-vectorfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.doc)|(\.docx)|(\.odt)|(\.rtf)|(\.tex)|(\.txt)|(\.wpd)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-textfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-textfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.7z)|(\.zip)|(\.rar)|(\.pkg)|(\.deb)|(\.arj)|(\.exe)|(\.rpm)|(\.tar\.gz)|(\.z)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-compressfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-compressfile' >{$temp_items[$i]}</a>";
             }else if(preg_match("/(\.js)/i", $temp_items[$i] , $matches)){
-                echo "<div class='fm-item fm-lower-level fm-jsfile' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-jsfile' >{$temp_items[$i]}</a>";
             }else {
-                echo "<div class='fm-item fm-lower-level fm-file' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-lower-level fm-file' >{$temp_items[$i]}</a>";
             }
             
             
         } else if(is_dir($current_item)){
             // IS DIR
             
-                echo "<div class='fm-item fm-dir fm-lower-level' >{$temp_items[$i]}</div>";
+                echo "<a target='_blank' href='$current_item' class='fm-item fm-dir fm-lower-level' >{$temp_items[$i]}</a>";
             
             
-            $GLOBALS['current_lvl'] += 1;
-            if(key_exists(($i + 1), $temp_items)){
+            
+            if((key_exists(($i + 1), $temp_items))){
+                console_log($temp_items);
                
             echo "<div class='fm-lower-wrapper fm-lower-after' style='top: {$top_amt}vh;'>";
             }else{
@@ -348,6 +360,11 @@ function subdirs($root_path){
     
 
 
+}
+
+function console_log($output){
+	$new_out = json_encode($output, JSON_HEX_TAG);
+    echo "<script>console.log($new_out);</script>";
 }
     ?>
     </div>
