@@ -164,18 +164,41 @@ body{
 </head>
 <body>
 <div class="fm-dir-root">ROOT</div>
-    <div class="fm-container">
-        
-            
+    <div class="fm-container">     
         
     <?php
+
+    // --- DIRECTORY TO SEACH IN ---
+    $directory = "./";
+
+    // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
+    $ignore_folders = array(
+        "git"
+    );
+
+    // ---------- END OF MANAGEABLE CODE ----------
+
+
+
+    // SET UP REGEX TO TEST FOR IGNORE FOLDERS
+
+    $ignore_RegEx = "";
+    if(count($ignore_folders) > 0){
+        $ignore_RegEx = "/";
+    for($i = 0; $i < count($ignore_folders); ++$i){
+        if($i > (count($ignore_folders) - 1)){
+            $ignore_RegEx .= "({$ignore_folders[$i]})|";
+        }else{
+            $ignore_RegEx .= "({$ignore_folders[$i]})";
+        }
+    }
+    $ignore_RegEx .= "/i";
+}
     
 
     // files level0[items[name=>value]]
 
-    $items = array(
-        scandir("./"),
-    );
+    $items = scandir($directory);
 
 
     // FOR RETURNS
@@ -185,37 +208,35 @@ body{
     // Scan and set up top level
 
     
-    array_shift($items[0]);
-    array_shift($items[0]);
-
-    check_files($items);
-
-    function check_files(&$items){
-        $current_dir = array(
-            "",
-        );
-
-        for($i = 0; $i < count($items); $i++){
-
-            for($o = 0; $o < count($items[$i]); ++$o){
-
-                $current_item = $items[$i][$o];
+    array_shift($items);
+    array_shift($items);
     
-                
-               check_file($current_item, $current_dir);
+    if(count($ignore_folders) > 0){for($i = 0; $i < count($items); ++$i){
+        if((is_dir($directory . "/" . $items[$i])) && (preg_match($ignore_RegEx, $items[$i], $matches))){
+            array_splice($items, $i, 1);
+        }
+    }}
+    
 
+    check_files($items, $directory);
+
+    function check_files(&$items, $directory){
+
+            for($o = 0; $o < count($items); ++$o){
+
+                $current_item = $items[$o];
                 
-            }
+               check_file($current_item, $directory);
     
         }
         // If File, echo
         
     }
 
-    function check_file($current_item, &$current_dir){
-        
+    function check_file($current_item, $directory){
+        $current_item_path = $directory . "/" . $current_item;
        
-        if(is_file($current_item)){
+        if(is_file($current_item_path)){
             
             if(preg_match("/(\.html)|(\.xml)/i", $current_item , $matches)){
                 $tempstr = "<div class='fm-item fm-webfile fm-top-level'>$current_item</div><br>";
@@ -241,29 +262,24 @@ body{
             echo $tempstr;
             
 
-        }else if(is_dir($current_item)){
+        }else if(is_dir($current_item_path)){
 
             $GLOBALS['current_lvl'] = 1;
             
             $tempstr = "<div class='fm-item fm-dir fm-top-level'>$current_item</div>";
             echo $tempstr;
-                //   Set New Directory
-                if(count($current_dir) > 2){
-                    $current_dir[] = ($current_dir[count($current_dir) - 1] . "/" . $current_item);
-                }else{
-                    $current_dir[] = ($current_dir[count($current_dir) - 1] . $current_item);
-                }
+            
                 
 
-                  if(count(scandir(($current_dir[count($current_dir) - 1]))) >= 3){
+                  if(count(scandir($current_item_path)) >= 3){
                     // 1 OR MORE SUBDIRS
 
-                     subdirs($current_dir[count($current_dir) - 1]);
-                     array_pop($current_dir);
+                     subdirs($current_item_path);
+                     
                   }else{
                     echo "<br>";
                     // NO SUBDIRS
-                    array_pop($current_dir);
+                    
                   }
     }
 }
@@ -274,6 +290,12 @@ function subdirs($root_path){
     $temp_items =  scandir($root_path);
     array_shift($temp_items);
     array_shift($temp_items);
+
+    if(count($GLOBALS["ignore_folders"]) > 0){for($i = 0; $i < count($temp_items); ++$i){
+        if((is_dir($root_path . "/" . $temp_items[$i])) && (preg_match($GLOBALS["ignore_RegEx"], $temp_items[$i], $matches))){
+            array_splice($temp_items, $i, 1);
+        }
+    }}
 
     for($i = 0; $i < count($temp_items); ++$i){
         $current_item = $root_path . "/" . $temp_items[$i];
