@@ -170,13 +170,11 @@ body{
     <?php
 
     // --- DIRECTORY TO SEACH IN ---
-    $directory = "./testing";
+    $directory = "./";
 
     // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
     $ignore_folders = array(
-        "git",
-        "jscript",
-        "testdir"
+        "git"
     );
 
     // ---------- END OF MANAGEABLE CODE ----------
