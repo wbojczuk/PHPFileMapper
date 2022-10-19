@@ -13,6 +13,7 @@
 
 body{
     min-width: 100vw;
+    
 }
 
 
@@ -24,6 +25,7 @@ body{
     width: auto;
     min-width: 100vw;
     max-width: 300vw;
+    
     position: relative;
     white-space: nowrap;
 
@@ -108,7 +110,7 @@ body{
     display: inline-block;
     position: absolute;
     bottom: -4vh;
-    left: calc(50% - 1px);
+    left: 1vw;
     width: 2px;
     height: 4vh;
     background-color: #aaa;
@@ -135,8 +137,8 @@ body{
     right: -2vw;
     top: calc(50% - 1px);
     width: 2vw;
-    height: 2px;
-    background-color: #000;
+    height: 3px;
+    background-color: #aaa;
     z-index: -10;
 }
 
@@ -252,7 +254,6 @@ body{
                     $current_dir[] = ($current_dir[count($current_dir) - 1] . $current_item);
                 }
                 
-                // console_log(scandir(($current_dir[count($current_dir) - 1])));
 
                   if(count(scandir(($current_dir[count($current_dir) - 1]))) >= 3){
                     // 1 OR MORE SUBDIRS
@@ -280,7 +281,7 @@ function subdirs($root_path){
         // IF FILE
         if(is_file($current_item)){
             
-            console_log($current_item);
+            
            
             if(preg_match("/(\.html)|(\.xml)/i", $temp_items[$i] , $matches)){
                 echo "<div class='fm-item fm-lower-level fm-webfile' >{$temp_items[$i]}</div>";
@@ -311,7 +312,7 @@ function subdirs($root_path){
             
             $GLOBALS['current_lvl'] += 1;
             if(key_exists(($i + 1), $temp_items)){
-                console_log("lol");
+               
             echo "<div class='fm-lower-wrapper fm-lower-after' style='top: {$top_amt}vh;'>";
             }else{
                 echo "<div class='fm-lower-wrapper' style='top: {$top_amt}vh;'>";
@@ -330,12 +331,6 @@ function subdirs($root_path){
 
 
 }
-
-
-    function console_log($output){
-        $new_out = json_encode($output, JSON_HEX_TAG);
-        echo "<script>console.log($new_out);</script>";
-    }
     ?>
     </div>
 </body>
