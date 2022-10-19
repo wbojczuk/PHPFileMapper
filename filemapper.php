@@ -174,7 +174,9 @@ body{
 
     // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
     $ignore_folders = array(
-        "git"
+        "git",
+        "jscript",
+        "testdir"
     );
 
     // ---------- END OF MANAGEABLE CODE ----------
@@ -205,9 +207,11 @@ echo $ignore_RegEx;
     array_shift($items);
     
     // Ignore Folders
-    if(count($ignore_folders) > 0){for($i = 0; $i < count($items); ++$i){
+    if(count($ignore_folders) > 0){$regloop = count($items); for($i = 0; $i < $regloop; ++$i){
         if((is_dir($directory . "/" . $items[$i])) && (preg_match($ignore_RegEx, $items[$i], $matches))){
             array_splice($items, $i, 1);
+            $regloop =  count($items);
+            $i = 0;
         }
     }}
     
@@ -287,9 +291,11 @@ function subdirs($root_path){
     array_shift($temp_items);
     array_shift($temp_items);
 
-    if(count($GLOBALS["ignore_folders"]) > 0){for($i = 0; $i < count($temp_items); ++$i){
+    if(count($GLOBALS["ignore_folders"]) > 0){$regloop =  count($temp_items); for($i = 0; $i < $regloop; ++$i){
         if((is_dir($root_path . "/" . $temp_items[$i])) && (preg_match($GLOBALS["ignore_RegEx"], $temp_items[$i], $matches))){
             array_splice($temp_items, $i, 1);
+            $regloop =  count($temp_items);
+            $i = 0;
         }
     }}
 
