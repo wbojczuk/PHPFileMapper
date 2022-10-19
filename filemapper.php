@@ -195,7 +195,6 @@ body{
     }
     $ignore_RegEx .= "/i";
 }
-echo $ignore_RegEx;
 
     $items = scandir($directory);
     $current_lvl = 0;
