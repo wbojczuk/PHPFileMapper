@@ -1,3 +1,9 @@
+<!--  
+ *  Author: William Bojczuk
+ *  FileName: filemapper.php
+ *  Edited Date: 10/20/2022
+ *  Version: 1.0
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,7 +203,7 @@ body{
     if(count($ignore_folders) > 0){
         $ignore_RegEx = "/^";
     for($i = 0; $i < count($ignore_folders); ++$i){
-        $ignore_folder = addcslashes($ignore_folders[$i], ".");
+        $ignore_folder = addcslashes($ignore_folders[$i], ".\\+*?()$[^]");
         if($i < (count($ignore_folders) - 1)){
             $ignore_RegEx .= "({ $ignore_folder})|";
         }else{
