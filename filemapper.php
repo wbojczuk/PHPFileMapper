@@ -162,7 +162,7 @@ body{
     left:-1vw;
     min-width: 100%;
     height: 2px;
-    margin-top: 12px;
+    margin-top: 14px;
     padding: 0 2vw;
     background-color: #ccc;
     z-index: -10;
@@ -191,20 +191,20 @@ body{
     // ---------- END OF MANAGEABLE CODE ----------
 
 
-
     // SET UP REGEX TO TEST FOR IGNORE FOLDERS
 
     $ignore_RegEx = "";
     if(count($ignore_folders) > 0){
-        $ignore_RegEx = "/";
+        $ignore_RegEx = "/^";
     for($i = 0; $i < count($ignore_folders); ++$i){
+        $ignore_folder = addcslashes($ignore_folders[$i], ".");
         if($i < (count($ignore_folders) - 1)){
-            $ignore_RegEx .= "({$ignore_folders[$i]})|";
+            $ignore_RegEx .= "({ $ignore_folder})|";
         }else{
-            $ignore_RegEx .= "({$ignore_folders[$i]})";
+            $ignore_RegEx .= "({$ignore_folder})";
         }
     }
-    $ignore_RegEx .= "/i";
+    $ignore_RegEx .= "$/i";
 }
 
     $items = scandir($directory);
