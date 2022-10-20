@@ -42,6 +42,7 @@ body{
     color: black;
     text-decoration: none;
     margin: 5px;
+    box-shadow: 4px 4px 4px rgba(0,0,0,0.3);
 }
 
 .fm-dir-root{
@@ -59,13 +60,15 @@ body{
     margin: 5px;
     font-weight: 800;
     background-color: rgb(253, 228, 194);
+    box-shadow: 4px 4px 4px rgba(0,0,0,0.3);
 }
 /* COLORS */
 .fm-dir{
     background-color: rgb(253, 228, 194);
 }
 .fm-file{
-    background-color: #dfdfdf;
+    background-color: #939599;
+    color: white;
 }
 
 .fm-webfile{
@@ -90,6 +93,9 @@ body{
 
 .fm-jsfile{
     background-color: #dab92d;
+}
+.fm-emptyfile{
+    background-color: #dfdfdf;
 }
 
 .fm-textfile{
@@ -179,7 +185,7 @@ body{
 
     // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
     $ignore_folders = array(
-        "git"
+       ".git"
     );
 
     // ---------- END OF MANAGEABLE CODE ----------
@@ -307,6 +313,9 @@ function subdirs($root_path){
         }
     }}
 
+    if(count($temp_items) == 0){
+        echo "<div class='fm-item fm-lower-level fm-emptyfile' >Empty</div>";
+    }
     for($i = 0; $i < count($temp_items); ++$i){
         $current_item = $root_path . "/" . $temp_items[$i];
 
@@ -341,7 +350,6 @@ function subdirs($root_path){
             
             
             if((key_exists(($i + 1), $temp_items))){
-           
                
             echo "<div class='fm-lower-wrapper fm-lower-after' style='top: {$top_amt}vh;'>";
             }else{
@@ -361,6 +369,7 @@ function subdirs($root_path){
 
 
 }
+
     ?>
     </div>
 </body>
