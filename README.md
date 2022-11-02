@@ -1,5 +1,6 @@
 # PHPFileMapper<br>
-Place and run filemapper.php in any directory on your server to get a visual diagram of all nested files and directories. Or specify your own directory. Files are highlighted based on their file-type
+Place and run filemapper.php in any directory on your server to get a visual diagram of all nested files and directories. Or specify your own directory. Files are highlighted based on their file-type<br>
+<b>DEMO: </b>http://wbojczuk.rf.gd/?i=1
 
 <h2>Settings</h2>
 <br>
