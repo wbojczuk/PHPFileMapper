@@ -4,6 +4,22 @@
  *  Edited Date: 10/20/2022
  *  Version: 1.0
 -->
+<?php
+    //amount to push off of lower level items. Different size screens may differ slightly
+    $subdir_margin = "14px";
+
+    // --- DIRECTORY TO SEACH IN ---
+    // IF DIRECTORY IS SET OUT OF THE WEB SERVER, LINKS WILL BE BROKEN
+    $directory = "./";
+
+    // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
+    $ignore_folders = array(
+       ".git"
+    );
+
+    // ---------- END OF MANAGEABLE CODE ----------
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,7 +184,7 @@ body{
     left:-1vw;
     min-width: 100%;
     height: 2px;
-    margin-top: 14px;
+    margin-top: <?php echo($subdir_margin); ?>;
     padding: 0 2vw;
     background-color: #ccc;
     z-index: -10;
@@ -185,17 +201,7 @@ body{
         <!-- ---------- START OF PHP SCRIPTING ---------- -->
     <?php
 
-    // --- DIRECTORY TO SEACH IN ---
-    // IF DIRECTORY IS SET OUT OF THE WEB SERVER, LINKS WILL BE BROKEN
-    $directory = "./";
-
-    // --- FOLDERS TO IGNORE (CASE INSENSITIVE) ---
-    $ignore_folders = array(
-       ".git"
-    );
-
-    // ---------- END OF MANAGEABLE CODE ----------
-
+    
 
     // SET UP REGEX TO TEST FOR IGNORE FOLDERS
 
