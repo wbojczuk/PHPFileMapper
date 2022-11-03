@@ -5,7 +5,7 @@
  *  Version: 1.0
 -->
 <?php
-    //amount to push off of lower level items. Different size screens may differ slightly
+    //amount to pull coonnecters to lower level items. Different size screens may differ slightly
     $subdir_margin = "14px";
 
     // --- DIRECTORY TO SEACH IN ---
